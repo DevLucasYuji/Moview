@@ -49,9 +49,12 @@ class _SplashPageState extends State<SplashPage> {
                 Navigator.pushNamed(context, route);
               });
 
-              return Transform.scale(
-                scale: 0.85,
-                child: Image.asset('assets/images/logo.png'),
+              return Hero(
+                tag: 'hero',
+                child: Transform.scale(
+                  scale: 0.85,
+                  child: Image.asset('assets/images/logo.png'),
+                ),
               );
             }
             return _logoWidget(context);
