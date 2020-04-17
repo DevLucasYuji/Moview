@@ -13,8 +13,14 @@ class SplashBloc extends BlocBase<SplashEvent, SplashState> {
     if (event is InitialEvent) {
       await Future.delayed(Duration(seconds: 3));
       yield SplashAnimationState();
-    } else if (event is FinishEvent) {
-      yield SplashFinishState(isAuth: false);
+    }
+
+    if (event is FinishAnimationEvent) {
+      yield SplashFinishState();
+    }
+
+    if (event is FinishEvent) {
+      yield FinishSplashState(isAuth: false);
     }
   }
 }

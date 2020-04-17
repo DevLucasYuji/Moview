@@ -37,15 +37,26 @@ class _SplashPageState extends State<SplashPage> {
             }
 
             if (state is SplashFinishState) {
-              return Hero(
-                tag: 'hero',
-                child: _animationTransform(context, () {
-                  final route = state.isAuth ? Routes.login : Routes.login;
-                  Navigator.pushNamed(context, route);
-                }),
+              return _animationTransform(
+                context,
+                () => _bloc.add(FinishEvent()),
               );
             }
 
+            if (state is FinishSplashState) {
+              Future.delayed(Duration(seconds: 3)).then((_) {
+                final route = state.isAuth ? Routes.login : Routes.login;
+                Navigator.pushNamed(context, route);
+              });
+
+              return Hero(
+                tag: 'hero',
+                child: Transform.scale(
+                  scale: 0.85,
+                  child: Image.asset('assets/images/logo.png'),
+                ),
+              );
+            }
             return _logoWidget(context);
           },
         ),
@@ -58,7 +69,7 @@ class _SplashPageState extends State<SplashPage> {
       tween: Tween(begin: 1, end: 0.4),
       curve: Curves.easeInBack,
       duration: Duration(seconds: 1),
-      onEnd: () => _bloc.add(FinishEvent()),
+      onEnd: () => _bloc.add(FinishAnimationEvent()),
       builder: (_, value, child) {
         _scaleValue = value;
         return _transformScale(value, child);
@@ -91,7 +102,7 @@ class _SplashPageState extends State<SplashPage> {
       children: <Widget>[
         _animationTranslate(
           begin: -375,
-          end: 60,
+          end: 55,
           child: _logoNameWidget(),
           onEnd: onEnd,
         ),

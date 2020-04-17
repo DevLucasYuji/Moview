@@ -9,6 +9,11 @@ class InitialEvent extends SplashEvent {
   List<Object> get props => [];
 }
 
+class FinishAnimationEvent extends SplashEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class FinishEvent extends SplashEvent {
   @override
   List<Object> get props => [];
