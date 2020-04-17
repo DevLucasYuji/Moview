@@ -15,9 +15,14 @@ class SplashAnimationState extends SplashState {
 }
 
 class SplashFinishState extends SplashState {
+  @override
+  List<Object> get props => [];
+}
+
+class FinishSplashState extends SplashState {
   final bool isAuth;
 
-  SplashFinishState({this.isAuth});
+  FinishSplashState({this.isAuth});
 
   @override
   List<Object> get props => [isAuth];

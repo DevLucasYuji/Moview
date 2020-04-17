@@ -8,7 +8,5 @@ class LoginBloc extends BlocBase<LoginEvent, LoginState> {
   LoginState get initialState => InitialLoginState();
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    // TODO: Add Logic
-  }
+  Stream<LoginState> mapEventToState(LoginEvent event) async* {}
 }
