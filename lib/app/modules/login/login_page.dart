@@ -1,5 +1,6 @@
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
+import 'package:Moview/app/widgets/app_text_field.dart';
 import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:Moview/app/widgets/single_child_scrollview_disallow_glow.dart';
 import 'package:flutter/material.dart';
@@ -138,80 +139,20 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          _fieldText(
-              hintText: "Login",
-              inputType: TextInputType.emailAddress,
-              icon: Icons.account_circle),
-          _fieldText(
+          AppTextField(
+            hintText: "Login",
+            inputType: TextInputType.emailAddress,
+            icon: Icons.account_circle,
+          ),
+          AppTextField(
             hintText: "Senha",
             inputType: TextInputType.visiblePassword,
             obscureText: _obscureText,
             padding: EdgeInsets.only(top: 24),
             icon: Icons.lock,
+            onPressed: () => setState(() => _obscureText = !_obscureText),
           )
         ],
-      ),
-    );
-  }
-
-  _fieldText({
-    String hintText,
-    TextInputType inputType,
-    bool obscureText,
-    EdgeInsetsGeometry padding,
-    IconData icon,
-  }) {
-    return Padding(
-      padding: padding ?? const EdgeInsets.all(0),
-      child: TextFormField(
-        obscureText: obscureText ?? false,
-        keyboardType: inputType,
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: 'Roboto',
-          fontSize: 20.0,
-          decoration: TextDecoration.none,
-        ),
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            icon,
-            color: Colors.white,
-          ),
-          filled: true,
-          enabled: true,
-          suffixStyle: TextStyle(color: Colors.red),
-          suffixIcon: obscureText != null
-              ? IconButton(
-                  icon: FaIcon(
-                    obscureText
-                        ? FontAwesomeIcons.eyeSlash
-                        : FontAwesomeIcons.eye,
-                    color: Colors.grey[500],
-                    size: 20,
-                  ),
-                  highlightColor: Colors.transparent,
-                  onPressed: () => setState(() => _obscureText = !_obscureText),
-                )
-              : null,
-          hintText: hintText,
-          contentPadding: EdgeInsets.only(top: 16, bottom: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-          hintStyle: TextStyle(
-            color: Colors.grey[500],
-            decoration: TextDecoration.none,
-          ),
-          fillColor: _bloc.color.input,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: _bloc.color.primary),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: _bloc.color.input),
-            borderRadius: BorderRadius.circular(6),
-          ),
-        ),
       ),
     );
   }
