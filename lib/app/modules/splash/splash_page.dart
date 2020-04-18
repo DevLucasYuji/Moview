@@ -20,10 +20,6 @@ class _SplashPageState extends State<SplashPage> {
     _bloc.add(InitialEvent());
   }
 
-  double _scaleValue;
-  double begin;
-  double end;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,25 +32,19 @@ class _SplashPageState extends State<SplashPage> {
               return _animationScale(context);
             }
 
-            if (state is SplashFinishState) {
-              return _animationTransform(
-                context,
-                () => _bloc.add(FinishEvent()),
-              );
-            }
-
             if (state is FinishSplashState) {
-              Future.delayed(Duration(seconds: 3)).then((_) {
-                final route = state.isAuth ? Routes.login : Routes.login;
-                Navigator.pushNamed(context, route);
-              });
-
               return Hero(
                 tag: 'hero',
-                child: Transform.scale(
-                  scale: 0.85,
-                  child: Image.asset('assets/images/logo.png'),
-                ),
+                child: _animationTransform(context, state.isReverse, () {
+                  if (!state.isReverse) {
+                    Future.delayed(Duration(milliseconds: 500)).then((_) {
+                      _bloc.add(FinishSplashEvent(isReverse: !state.isReverse));
+                    });
+                  } else {
+                    final route = state.isAuth ? Routes.login : Routes.login;
+                    Navigator.pushReplacementNamed(context, route);
+                  }
+                }),
               );
             }
             return _logoWidget(context);
@@ -69,9 +59,8 @@ class _SplashPageState extends State<SplashPage> {
       tween: Tween(begin: 1, end: 0.4),
       curve: Curves.easeInBack,
       duration: Duration(seconds: 1),
-      onEnd: () => _bloc.add(FinishAnimationEvent()),
+      onEnd: () => _bloc.add(FinishSplashEvent(isReverse: false)),
       builder: (_, value, child) {
-        _scaleValue = value;
         return _transformScale(value, child);
       },
       child: _logoWidget(context),
@@ -96,13 +85,18 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  Widget _animationTransform(BuildContext context, Function onEnd) {
+  Widget _animationTransform(context, bool isReverse, Function onEnd) {
+    double beginName = -375;
+    double endName = 55;
+    double beginLogo = 0;
+    double endLogo = -125;
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         _animationTranslate(
-          begin: -375,
-          end: 55,
+          begin: isReverse ? endName : beginName,
+          end: isReverse ? beginName : endName,
           child: _logoNameWidget(),
           onEnd: onEnd,
         ),
@@ -118,9 +112,9 @@ class _SplashPageState extends State<SplashPage> {
           ),
         ),
         _animationTranslate(
-          begin: 0,
-          end: -125,
-          child: _transformScale(_scaleValue, _logoWidget(context)),
+          begin: isReverse ? endLogo : beginLogo,
+          end: isReverse ? beginLogo : endLogo,
+          child: _transformScale(0.4, _logoWidget(context)),
         )
       ],
     );

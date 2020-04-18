@@ -9,12 +9,10 @@ class InitialEvent extends SplashEvent {
   List<Object> get props => [];
 }
 
-class FinishAnimationEvent extends SplashEvent {
-  @override
-  List<Object> get props => [];
-}
+class FinishSplashEvent extends SplashEvent {
+  final bool isReverse;
 
-class FinishEvent extends SplashEvent {
+  FinishSplashEvent({this.isReverse});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isReverse];
 }

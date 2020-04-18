@@ -15,12 +15,8 @@ class SplashBloc extends BlocBase<SplashEvent, SplashState> {
       yield SplashAnimationState();
     }
 
-    if (event is FinishAnimationEvent) {
-      yield SplashFinishState();
-    }
-
-    if (event is FinishEvent) {
-      yield FinishSplashState(isAuth: false);
+    if (event is FinishSplashEvent) {
+      yield FinishSplashState(isAuth: false, isReverse: event.isReverse);
     }
   }
 }

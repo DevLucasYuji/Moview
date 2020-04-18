@@ -14,16 +14,12 @@ class SplashAnimationState extends SplashState {
   List<Object> get props => [];
 }
 
-class SplashFinishState extends SplashState {
-  @override
-  List<Object> get props => [];
-}
-
 class FinishSplashState extends SplashState {
   final bool isAuth;
+  final bool isReverse;
 
-  FinishSplashState({this.isAuth});
+  FinishSplashState({this.isReverse, this.isAuth});
 
   @override
-  List<Object> get props => [isAuth];
+  List<Object> get props => [isAuth, isReverse];
 }

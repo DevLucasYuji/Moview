@@ -20,7 +20,7 @@ class AppColor {
     onChanged();
   }
 
-  static const Color primaryColor = Color(0xFF130D59);
+  static const Color primaryColor = Color(0xFF325CD4);
   static const Color secundaryColor = Color(0xFF090B15);
 
   Color primary;

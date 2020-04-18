@@ -20,6 +20,7 @@ class AppWidget extends StatelessWidget {
       child: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           return MaterialApp(
+              debugShowCheckedModeBanner: false,
               localizationsDelegates: [
                 AppStringDelegate(),
                 GlobalMaterialLocalizations.delegate,
