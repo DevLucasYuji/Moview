@@ -3,6 +3,7 @@ import 'package:Moview/app/modules/splash/bloc/splash_bloc.dart';
 import 'package:Moview/app/modules/splash/bloc/splash_event.dart';
 import 'package:Moview/app/modules/splash/bloc/splash_state.dart';
 import 'package:Moview/app/modules/splash/splash_module.dart';
+import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,41 +23,51 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: _bloc.color.secondary,
-      child: Center(
-        child: BlocBuilder<SplashBloc, SplashState>(
-          bloc: _bloc,
-          builder: (BuildContext context, state) {
-            if (state is SplashAnimationState) {
-              return _animationScale(context);
-            }
-
-            if (state is FinishSplashState) {
-              return Hero(
-                tag: 'hero',
-                child: _animationTransform(context, state.isReverse, () {
-                  if (!state.isReverse) {
-                    Future.delayed(Duration(milliseconds: 500)).then((_) {
-                      _bloc.add(FinishSplashEvent(isReverse: !state.isReverse));
-                    });
-                  } else {
-                    final route = state.isAuth ? Routes.login : Routes.login;
-                    Navigator.pushReplacementNamed(context, route);
-                  }
-                }),
-              );
-            }
-            return _logoWidget(context);
-          },
+    return Stack(
+      children: <Widget>[
+        BackgroundLinear(
+          beginColor: _bloc.color.secondaryVariant,
+          endColor: _bloc.color.secondary,
+          begin: Alignment.centerLeft,
         ),
-      ),
+        Container(
+          child: Center(
+            child: BlocBuilder<SplashBloc, SplashState>(
+              bloc: _bloc,
+              builder: (BuildContext context, state) {
+                if (state is SplashAnimationState) {
+                  return _animationScale(context);
+                }
+
+                if (state is FinishSplashState) {
+                  return Hero(
+                    tag: "logoIcon",
+                    child: _animationTransform(context, state.isReverse, () {
+                      if (!state.isReverse) {
+                        Future.delayed(Duration(milliseconds: 500)).then((_) {
+                          _bloc.add(
+                              FinishSplashEvent(isReverse: !state.isReverse));
+                        });
+                      } else {
+                        final route =
+                            state.isAuth ? Routes.login : Routes.login;
+                        Navigator.pushReplacementNamed(context, route);
+                      }
+                    }),
+                  );
+                }
+                return _logoWidget(context);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   TweenAnimationBuilder<double> _animationScale(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 1, end: 0.4),
+      tween: Tween(begin: 1, end: 0.5),
       curve: Curves.easeInBack,
       duration: Duration(seconds: 1),
       onEnd: () => _bloc.add(FinishSplashEvent(isReverse: false)),
@@ -74,7 +85,7 @@ class _SplashPageState extends State<SplashPage> {
     return Image.asset(
       'assets/images/logo_icon.png',
       fit: BoxFit.fitWidth,
-      width: 225,
+      width: 175,
     );
   }
 
@@ -105,16 +116,15 @@ class _SplashPageState extends State<SplashPage> {
           child: ClipPath(
             clipper: TriangleClipper(),
             child: Container(
-              height: 225,
-              color: _bloc.color.secondary,
-              width: 115,
+              color: _bloc.color.secondaryVariant,
+              width: (MediaQuery.of(context).size.width / 2) - endName - 25,
             ),
           ),
         ),
         _animationTranslate(
           begin: isReverse ? endLogo : beginLogo,
           end: isReverse ? beginLogo : endLogo,
-          child: _transformScale(0.4, _logoWidget(context)),
+          child: _transformScale(0.5, _logoWidget(context)),
         )
       ],
     );
@@ -153,7 +163,11 @@ class TriangleClipper extends CustomClipper<Path> {
     path.lineTo(0.0, size.height);
     path.lineTo(
       size.width,
-      size.height / 2,
+      size.height / 1.95,
+    );
+    path.lineTo(
+      size.width,
+      size.height / 2.05,
     );
     path.close();
     return path;

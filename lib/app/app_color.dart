@@ -12,27 +12,31 @@ class AppColor {
 
   factory AppColor() {
     _instance ??= AppColor._newInstance();
-    return _instance..onChanged();
+    return _instance..fetchColor();
   }
 
   switchMode() {
     _actualMode = _actualMode == standartMode ? blackMode : standartMode;
-    onChanged();
+    fetchColor();
   }
 
-  static const Color primaryColor = Color(0xFF325CD4);
-  static const Color secundaryColor = Color(0xFF090B15);
-
   Color primary;
+  Color primaryVariant;
   Color secondary;
+  Color secondaryVariant;
+  Color input;
 
-  onChanged() {
-    if (_actualMode == standartMode) {
-      primary = primaryColor;
-      secondary = secundaryColor;
-    } else {
-      primary = primaryColor;
-      secondary = secundaryColor;
-    }
+  fetchColor() {
+    primary = _appColor(dark: Color(0xFF325CD4));
+    primaryVariant = _appColor(dark: Color(0xFF325CD4));
+    secondary = _appColor(dark: Color(0xFF1c0952));
+    secondaryVariant = _appColor(dark: Color(0xFF18204d));
+    input = _appColor(dark: Color(0xFF212c69));
+  }
+
+  Color _appColor({Color light, Color dark, Color standart}) {
+    return standart ?? _actualMode == standartMode
+        ? light ?? dark
+        : dark ?? light;
   }
 }

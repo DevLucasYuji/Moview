@@ -1,4 +1,3 @@
-import 'package:Moview/app/app_color.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundLinear extends StatelessWidget {
@@ -9,8 +8,8 @@ class BackgroundLinear extends StatelessWidget {
   final Widget child;
   const BackgroundLinear({
     Key key,
-    this.beginColor = AppColor.primaryColor,
-    this.endColor = AppColor.secundaryColor,
+    this.beginColor = Colors.black,
+    this.endColor = Colors.white,
     this.begin = Alignment.topLeft,
     this.end = Alignment.bottomRight,
     this.child,
@@ -24,6 +23,7 @@ class BackgroundLinear extends StatelessWidget {
           colors: <Color>[beginColor, endColor],
           begin: begin,
           end: end,
+          stops: [0.35, 1],
         ),
       ),
       child: child ?? Container(),

@@ -1,6 +1,9 @@
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
+import 'package:Moview/app/widgets/background_linear.dart';
+import 'package:Moview/app/widgets/single_child_scrollview_disallow_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -21,10 +24,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _bloc.color.secondary,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 72),
-        child: _initialAnimation ? _animation() : _body(),
+      body: Stack(
+        children: [
+          BackgroundLinear(
+            beginColor: _bloc.color.secondaryVariant,
+            endColor: _bloc.color.secondary,
+            begin: Alignment.centerLeft,
+          ),
+          _initialAnimation ? _animation() : _body(),
+        ],
       ),
     );
   }
@@ -36,28 +44,38 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _body() {
-    Future.delayed(Duration(milliseconds: 100)).then(
-      (value) => setState(() => _opacityLogo = 1),
-    );
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overscroll) {
-        overscroll.disallowGlow();
-      },
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              _logoIcon(),
-              _animatedOpacity(
-                _logoName(),
-                padding: const EdgeInsets.only(top: 6.0),
+    _setOpacity();
+
+    return SingleChildScrollViewDisallowGlow(
+      layoutBuilder: true,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _logoIcon(),
+                  _animatedOpacity(
+                    child: _logoName(),
+                    padding: const EdgeInsets.only(top: 6.0),
+                  )
+                ],
               ),
-              _animatedOpacity(_formLogin())
-            ],
-          ),
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _animatedOpacity(
+                child: _formLogin(),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -67,16 +85,20 @@ class _LoginPageState extends State<LoginPage> {
     Future.delayed(Duration(microseconds: 100)).then(
       (_) => setState(() => _alignment = Alignment.topCenter),
     );
+    bool isTopCenter = _alignment == Alignment.topCenter;
+
     return AnimatedAlign(
       duration: Duration(milliseconds: 850),
       curve: Curves.easeInOutBack,
       alignment: _alignment,
-      onEnd: () => setState(() {
-        if (_alignment == Alignment.topCenter) _initialAnimation = false;
-      }),
-      child: Hero(
-        tag: 'hero',
-        child: _logoIcon(),
+      onEnd: () =>
+          setState(() => isTopCenter ? _initialAnimation = false : null),
+      child: FractionallySizedBox(
+        heightFactor: 0.47,
+        child: Hero(
+          tag: "logoIcon",
+          child: _logoIcon(),
+        ),
       ),
     );
   }
@@ -84,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget _logoIcon() {
     return Image.asset(
       'assets/images/logo_icon.png',
+      width: 90,
       height: 120,
+      fit: BoxFit.fitWidth,
     );
   }
 
@@ -95,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _animatedOpacity(Widget child, {EdgeInsetsGeometry padding}) {
+  Widget _animatedOpacity({Widget child, EdgeInsetsGeometry padding}) {
     return AnimatedOpacity(
       opacity: _opacityLogo,
       curve: Curves.easeInOut,
@@ -109,9 +133,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _formLogin() {
     return Container(
-      margin: EdgeInsets.all(16),
+      margin: EdgeInsets.all(20),
       padding: EdgeInsets.all(8),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           _fieldText(
               hintText: "Login",
@@ -154,15 +179,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
           filled: true,
           enabled: true,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
           suffixStyle: TextStyle(color: Colors.red),
           suffixIcon: obscureText != null
               ? IconButton(
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.white,
+                  icon: FaIcon(
+                    obscureText
+                        ? FontAwesomeIcons.eyeSlash
+                        : FontAwesomeIcons.eye,
+                    color: Colors.grey[500],
+                    size: 20,
                   ),
                   highlightColor: Colors.transparent,
                   onPressed: () => setState(() => _obscureText = !_obscureText),
@@ -174,12 +199,26 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(6),
           ),
           hintStyle: TextStyle(
-            color: Colors.white,
+            color: Colors.grey[500],
             decoration: TextDecoration.none,
           ),
-          fillColor: _bloc.color.primary,
+          fillColor: _bloc.color.input,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _bloc.color.primary),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: _bloc.color.input),
+            borderRadius: BorderRadius.circular(6),
+          ),
         ),
       ),
+    );
+  }
+
+  _setOpacity() {
+    Future.delayed(Duration(milliseconds: 100)).then(
+      (value) => setState(() => _opacityLogo = 1),
     );
   }
 }
