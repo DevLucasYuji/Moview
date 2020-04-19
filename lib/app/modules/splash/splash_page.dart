@@ -44,9 +44,10 @@ class _SplashPageState extends State<SplashPage> {
                     tag: "logoIcon",
                     child: _animationTransform(context, state.isReverse, () {
                       if (!state.isReverse) {
-                        Future.delayed(Duration(milliseconds: 500)).then((_) {
+                        Future.delayed(Duration(milliseconds: 250)).then((_) {
                           _bloc.add(
-                              FinishSplashEvent(isReverse: !state.isReverse));
+                            FinishSplashEvent(isReverse: !state.isReverse),
+                          );
                         });
                       } else {
                         final route =
@@ -106,8 +107,9 @@ class _SplashPageState extends State<SplashPage> {
       alignment: Alignment.center,
       children: <Widget>[
         _animationTranslate(
-          begin: isReverse ? endName : beginName,
-          end: isReverse ? beginName : endName,
+          isReverse: isReverse,
+          begin: beginName,
+          end: endName,
           child: _logoNameWidget(),
           onEnd: onEnd,
         ),
@@ -122,8 +124,9 @@ class _SplashPageState extends State<SplashPage> {
           ),
         ),
         _animationTranslate(
-          begin: isReverse ? endLogo : beginLogo,
-          end: isReverse ? beginLogo : endLogo,
+          isReverse: isReverse,
+          begin: beginLogo,
+          end: endLogo,
           child: _transformScale(0.5, _logoWidget(context)),
         )
       ],
@@ -135,10 +138,14 @@ class _SplashPageState extends State<SplashPage> {
     double begin,
     double end,
     Function onEnd,
+    bool isReverse,
   }) {
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: begin, end: end),
-      duration: Duration(seconds: 2),
+      tween: Tween(
+        begin: isReverse ? end : begin,
+        end: isReverse ? begin : end,
+      ),
+      duration: Duration(milliseconds: isReverse ? 1250 : 2000),
       curve: Curves.easeInOutQuint,
       onEnd: onEnd,
       builder: (_, value, child) => Transform.translate(

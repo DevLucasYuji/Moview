@@ -25,6 +25,7 @@ class AppColor {
   Color secondary;
   Color secondaryVariant;
   Color input;
+  Color textButton;
 
   fetchColor() {
     primary = _appColor(dark: Color(0xFF325CD4));
@@ -32,6 +33,7 @@ class AppColor {
     secondary = _appColor(dark: Color(0xFF1c0952));
     secondaryVariant = _appColor(dark: Color(0xFF18204d));
     input = _appColor(dark: Color(0xFF212c69));
+    textButton = _appColor(dark: Colors.white);
   }
 
   Color _appColor({Color light, Color dark, Color standart}) {

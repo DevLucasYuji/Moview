@@ -1,10 +1,12 @@
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
+import 'package:Moview/app/modules/login/bloc/login_state.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
+import 'package:Moview/app/widgets/app_button.dart';
 import 'package:Moview/app/widgets/app_text_field.dart';
 import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:Moview/app/widgets/single_child_scrollview_disallow_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -20,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _initialAnimation = true;
   Alignment _alignment = Alignment.center;
   double _opacityLogo = 0;
-
+  bool _isLoading = false;
   GlobalKey _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _body() {
-    _setOpacity();
+    _initOpacity();
 
     return SingleChildScrollViewDisallowGlow(
       layoutBuilder: true,
@@ -63,8 +65,8 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   _logoIcon(),
                   _animatedOpacity(
-                    child: _logoName(),
                     padding: const EdgeInsets.only(top: 6.0),
+                    child: _logoName(),
                   )
                 ],
               ),
@@ -83,22 +85,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _animation() {
-    Future.delayed(Duration(microseconds: 100)).then(
+    Future.delayed(Duration(microseconds: 1)).then(
       (_) => setState(() => _alignment = Alignment.topCenter),
     );
     bool isTopCenter = _alignment == Alignment.topCenter;
 
     return AnimatedAlign(
-      duration: Duration(milliseconds: 850),
-      curve: Curves.easeInOutBack,
+      duration: Duration(milliseconds: 650),
+      curve: Curves.linearToEaseOut,
       alignment: _alignment,
-      onEnd: () =>
-          setState(() => isTopCenter ? _initialAnimation = false : null),
+      onEnd: () {
+        setState(() => isTopCenter ? _initialAnimation = false : null);
+      },
       child: FractionallySizedBox(
-        heightFactor: 0.47,
-        child: Hero(
-          tag: "logoIcon",
-          child: _logoIcon(),
+        heightFactor: 0.5,
+        child: Transform.translate(
+          offset: Offset(0, -20.5),
+          child: Hero(
+            tag: "logoIcon",
+            child: _logoIcon(),
+          ),
         ),
       ),
     );
@@ -107,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _logoIcon() {
     return Image.asset(
       'assets/images/logo_icon.png',
-      width: 90,
+      width: 85,
       height: 120,
       fit: BoxFit.fitWidth,
     );
@@ -136,30 +142,62 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.all(20),
       padding: EdgeInsets.all(8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          AppTextField(
-            hintText: "Login",
-            inputType: TextInputType.emailAddress,
-            icon: Icons.account_circle,
-          ),
-          AppTextField(
-            hintText: "Senha",
-            inputType: TextInputType.visiblePassword,
-            obscureText: _obscureText,
-            padding: EdgeInsets.only(top: 24),
-            icon: Icons.lock,
-            onPressed: () => setState(() => _obscureText = !_obscureText),
-          )
-        ],
+      child: BlocBuilder<LoginBloc, LoginState>(
+        bloc: _bloc,
+        builder: (context, state) => Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            AppTextField(
+              hintText: "Login",
+              inputType: TextInputType.emailAddress,
+              icon: Icons.account_circle,
+            ),
+            AppTextField(
+              hintText: "Senha",
+              inputType: TextInputType.visiblePassword,
+              obscureText: _obscureText,
+              padding: EdgeInsets.only(top: 24),
+              icon: Icons.lock,
+              onPressed: () => setState(() => _obscureText = !_obscureText),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OutlineButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Registrar-se",
+                      style: TextStyle(
+                        color: Colors.grey[300],
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    borderSide: BorderSide(
+                      width: 0,
+                      color: Colors.transparent,
+                    ),
+                    highlightedBorderColor: Colors.transparent,
+                  ),
+                  AppButton(
+                    text: "Entrar",
+                    isLoading: _isLoading,
+                    onPressed: () => setState(() => _isLoading = !_isLoading),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  _setOpacity() {
-    Future.delayed(Duration(milliseconds: 100)).then(
-      (value) => setState(() => _opacityLogo = 1),
+  _initOpacity() {
+    Future.delayed(Duration(microseconds: 100)).then(
+      (_) => setState(() => _opacityLogo = 1),
     );
   }
 }
