@@ -5,11 +5,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppTextField extends StatelessWidget {
   final String hintText;
+  final String errorLabel;
   final TextInputType inputType;
   final bool obscureText;
   final EdgeInsetsGeometry padding;
   final IconData icon;
   final Function onPressed;
+  final Function validator;
 
   const AppTextField({
     Key key,
@@ -19,6 +21,8 @@ class AppTextField extends StatelessWidget {
     this.padding,
     this.icon,
     this.onPressed,
+    this.validator,
+    this.errorLabel = "Field must not be empty",
   }) : super(key: key);
 
   @override
@@ -27,6 +31,7 @@ class AppTextField extends StatelessWidget {
     return Padding(
       padding: padding ?? const EdgeInsets.all(0),
       child: TextFormField(
+        validator: (value) => value.isEmpty ? errorLabel : null,
         obscureText: obscureText ?? false,
         keyboardType: inputType,
         style: TextStyle(

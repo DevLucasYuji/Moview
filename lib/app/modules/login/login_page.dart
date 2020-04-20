@@ -1,4 +1,5 @@
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
+import 'package:Moview/app/modules/login/bloc/login_event.dart';
 import 'package:Moview/app/modules/login/bloc/login_state.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
 import 'package:Moview/app/widgets/app_button.dart';
@@ -18,12 +19,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   LoginBloc _bloc = LoginModule.to.getBloc();
 
-  bool _obscureText = true;
-  bool _initialAnimation = true;
+  GlobalKey _formKey = GlobalKey<FormState>();
   Alignment _alignment = Alignment.center;
   double _opacityLogo = 0;
-  bool _isLoading = false;
-  GlobalKey _formKey = GlobalKey<FormState>();
+  bool _obscureText = true;
+  bool _initialAnimation = true;
+  bool _isLoading;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,53 +146,60 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.all(8),
       child: BlocBuilder<LoginBloc, LoginState>(
         bloc: _bloc,
-        builder: (context, state) => Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            AppTextField(
-              hintText: "Login",
-              inputType: TextInputType.emailAddress,
-              icon: Icons.account_circle,
-            ),
-            AppTextField(
-              hintText: "Senha",
-              inputType: TextInputType.visiblePassword,
-              obscureText: _obscureText,
-              padding: EdgeInsets.only(top: 24),
-              icon: Icons.lock,
-              onPressed: () => setState(() => _obscureText = !_obscureText),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlineButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Registrar-se",
-                      style: TextStyle(
-                        color: Colors.grey[300],
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    borderSide: BorderSide(
-                      width: 0,
-                      color: Colors.transparent,
-                    ),
-                    highlightedBorderColor: Colors.transparent,
-                  ),
-                  AppButton(
-                    text: "Entrar",
-                    isLoading: _isLoading,
-                    onPressed: () => setState(() => _isLoading = !_isLoading),
-                  )
-                ],
+        builder: (context, state) {
+          _isLoading = state is LoadingLoginState;
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              AppTextField(
+                hintText: "Login",
+                inputType: TextInputType.emailAddress,
+                icon: Icons.account_circle,
               ),
-            )
-          ],
-        ),
+              AppTextField(
+                hintText: "Senha",
+                inputType: TextInputType.visiblePassword,
+                obscureText: _obscureText,
+                padding: EdgeInsets.only(top: 24),
+                icon: Icons.lock,
+                validator: (_) => "OPA",
+                onPressed: () => setState(() => _obscureText = !_obscureText),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlineButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Registrar-se",
+                        style: TextStyle(
+                          color: Colors.grey[300],
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      borderSide: BorderSide(
+                        width: 0,
+                        color: Colors.transparent,
+                      ),
+                      highlightedBorderColor: Colors.transparent,
+                    ),
+                    AppButton(
+                      text: "Entrar",
+                      isLoading: _isLoading,
+                      onPressed: () {
+                        final FormState form = _formKey.currentState;
+                        if (form.validate()) _bloc.add(FetchLoginEvent());
+                      },
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
