@@ -60,13 +60,10 @@ class AppButton extends StatelessWidget {
   Widget _loader() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: GestureDetector(
-        onTap: onPressed,
-        child: FittedBox(
-          fit: BoxFit.fitHeight,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          ),
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
       ),
     );
