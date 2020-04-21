@@ -1,3 +1,5 @@
+import 'package:Moview/app/app_routes.dart';
+import 'package:Moview/app/helper/regex_util.dart';
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
 import 'package:Moview/app/modules/login/bloc/login_event.dart';
 import 'package:Moview/app/modules/login/bloc/login_state.dart';
@@ -55,8 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _body() {
-    _initOpacity();
-
+    Future.microtask(() => setState(() => _opacityLogo = 1));
     return SingleChildScrollViewDisallowGlow(
       layoutBuilder: true,
       child: Form(
@@ -93,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _animation() {
-    Future.delayed(Duration(microseconds: 1)).then(
-      (_) => setState(() => _alignment = Alignment.topCenter),
-    );
+    Future.microtask(() => setState(() => _alignment = Alignment.topCenter));
     bool isTopCenter = _alignment == Alignment.topCenter;
 
     return AnimatedAlign(
@@ -154,6 +153,8 @@ class _LoginPageState extends State<LoginPage> {
         bloc: _bloc,
         builder: (context, state) {
           _isLoading = state is LoadingLoginState;
+          if (state is SuccessLoginState) _showLoginScreen(context);
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -162,6 +163,17 @@ class _LoginPageState extends State<LoginPage> {
                 inputType: TextInputType.emailAddress,
                 icon: Icons.account_circle,
                 controller: _emailController,
+                validator: (String email) {
+                  if (email.isEmpty) {
+                    return "This field must not be empty";
+                  }
+
+                  if (!RegexUtils.validEmail(email)) {
+                    return "This field need to be an email";
+                  }
+
+                  return null;
+                },
               ),
               AppTextField(
                 hintText: "Senha",
@@ -169,7 +181,6 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: _obscureText,
                 padding: EdgeInsets.only(top: 24),
                 icon: Icons.lock,
-                validator: (_) => "OPA",
                 controller: _passwordController,
                 onSuffixPressed: () =>
                     setState(() => _obscureText = !_obscureText),
@@ -203,8 +214,8 @@ class _LoginPageState extends State<LoginPage> {
                         if (form.validate()) {
                           _bloc.add(
                             FetchLoginEvent(
-                              email: _emailController.text,
-                              password: _emailController.text,
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text.trim(),
                             ),
                           );
                         }
@@ -220,9 +231,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _initOpacity() {
-    Future.delayed(Duration(microseconds: 100)).then(
-      (_) => setState(() => _opacityLogo = 1),
-    );
+  _showLoginScreen(context) {
+    Navigator.pushReplacementNamed(context, Routes.home);
   }
 }

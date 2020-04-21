@@ -1,4 +1,4 @@
-package com.example.Moview
+package br.com.moview
 
 import io.flutter.embedding.android.FlutterActivity
 

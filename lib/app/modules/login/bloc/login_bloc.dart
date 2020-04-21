@@ -15,11 +15,15 @@ class LoginBloc extends BlocBase<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is FetchLoginEvent) {
       yield LoadingLoginState();
-      var user = await loginRepository.handleSignInEmail(
-        event.email,
-        event.password,
-      );
-      print(user);
+      try {
+        var user = await loginRepository.handleSignInEmail(
+          event.email,
+          event.password,
+        );
+        yield SuccessLoginState();
+      } catch (exception) {
+        yield InitialLoginState();
+      }
     }
   }
 }

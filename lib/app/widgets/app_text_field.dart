@@ -11,7 +11,7 @@ class AppTextField extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final IconData icon;
   final Function onSuffixPressed;
-  final Function validator;
+  final Function(String) validator;
   final TextEditingController controller;
 
   const AppTextField({
@@ -34,7 +34,7 @@ class AppTextField extends StatelessWidget {
       padding: padding ?? const EdgeInsets.all(0),
       child: TextFormField(
         controller: controller,
-        validator: (value) => value.isEmpty ? errorLabel : null,
+        validator: validator ?? (value) => value.isEmpty ? errorLabel : null,
         obscureText: obscureText ?? false,
         keyboardType: inputType,
         style: TextStyle(

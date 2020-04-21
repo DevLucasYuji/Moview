@@ -13,3 +13,8 @@ class LoadingLoginState extends LoginState {
   @override
   List<Object> get props => [];
 }
+
+class SuccessLoginState extends LoginState {
+  @override
+  List<Object> get props => [];
+}

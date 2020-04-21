@@ -21,7 +21,9 @@ class LoginRepository {
 
   Future<FirebaseUser> handleSignUp(email, password) async {
     AuthResult result = await auth.createUserWithEmailAndPassword(
-        email: email, password: password);
+      email: email,
+      password: password,
+    );
     final FirebaseUser user = result.user;
 
     assert(user != null);
