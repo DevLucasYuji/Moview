@@ -21,7 +21,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "accountNotExist" : MessageLookupByLibrary.simpleMessage("Essa conta não existe"),
+    "emailInvalid" : MessageLookupByLibrary.simpleMessage("Preencha com um e-mail inválido"),
+    "emailWrong" : MessageLookupByLibrary.simpleMessage("Seu e-mail está errado"),
+    "emptyField" : MessageLookupByLibrary.simpleMessage("Este campo não pode estar vazio"),
+    "enter" : MessageLookupByLibrary.simpleMessage("Enter"),
     "hello" : MessageLookupByLibrary.simpleMessage("Olá"),
+    "password" : MessageLookupByLibrary.simpleMessage("Password"),
+    "passwordWrong" : MessageLookupByLibrary.simpleMessage("Sua senha está errada"),
+    "register" : MessageLookupByLibrary.simpleMessage("Registrar-se"),
     "title" : MessageLookupByLibrary.simpleMessage("Olá mundo")
   };
 }

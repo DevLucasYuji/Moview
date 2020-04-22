@@ -6,7 +6,7 @@ import 'package:Moview/app/bloc/app_state.dart';
 import 'package:Moview/app/modules/home/home_module.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
 import 'package:Moview/app/modules/splash/splash_module.dart';
-import 'package:Moview/app_string.dart';
+import 'package:Moview/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,7 +22,7 @@ class AppWidget extends StatelessWidget {
           return MaterialApp(
               debugShowCheckedModeBanner: false,
               localizationsDelegates: [
-                AppStringDelegate(),
+                S.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate
               ],

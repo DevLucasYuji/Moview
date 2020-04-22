@@ -1,5 +1,5 @@
 import 'package:Moview/app/app_routes.dart';
-import 'package:Moview/app/helper/regex_util.dart';
+import 'package:Moview/app/utils/regex_util.dart';
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
 import 'package:Moview/app/modules/login/bloc/login_event.dart';
 import 'package:Moview/app/modules/login/bloc/login_state.dart';
@@ -165,18 +165,18 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _emailController,
                 validator: (String email) {
                   if (email.isEmpty) {
-                    return "This field must not be empty";
+                    return _bloc.translator.emptyField;
                   }
 
                   if (!RegexUtils.validEmail(email)) {
-                    return "This field need to be an email";
+                    return _bloc.translator.emailInvalid;
                   }
 
                   return null;
                 },
               ),
               AppTextField(
-                hintText: "Senha",
+                hintText: _bloc.translator.password,
                 inputType: TextInputType.visiblePassword,
                 obscureText: _obscureText,
                 padding: EdgeInsets.only(top: 24),
@@ -185,6 +185,19 @@ class _LoginPageState extends State<LoginPage> {
                 onSuffixPressed: () =>
                     setState(() => _obscureText = !_obscureText),
               ),
+              (state is ErrorLoginState)
+                  ? Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(top: 8, left: 8),
+                      child: Text(
+                        state.message,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Row(
@@ -193,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                     OutlineButton(
                       onPressed: () {},
                       child: Text(
-                        "Registrar-se",
+                        _bloc.translator.register,
                         style: TextStyle(
                           color: Colors.grey[300],
                           fontSize: 18,
@@ -207,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                       highlightedBorderColor: Colors.transparent,
                     ),
                     AppButton(
-                      text: "Entrar",
+                      text: _bloc.translator.enter,
                       isLoading: _isLoading,
                       onPressed: () {
                         final FormState form = _formKey.currentState;

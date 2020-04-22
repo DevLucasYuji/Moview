@@ -1,12 +1,13 @@
 import 'package:Moview/app/app_color.dart';
 import 'package:Moview/app/app_module.dart';
 import 'package:Moview/app/bloc/app_bloc.dart';
-import 'package:Moview/app_string.dart';
+import 'package:Moview/generated/l10n.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 abstract class BlocBase<Event, State> extends Bloc<Event, State> {
-  static AppString _appString = AppModule.to.getDependency();
+  static S _s = AppModule.to.getDependency();
 
   static AppColor _appColor = AppModule.to.getDependency();
 
@@ -14,15 +15,13 @@ abstract class BlocBase<Event, State> extends Bloc<Event, State> {
 
   AppColor get color => _appColor;
 
-  AppString get string => _appString;
+  S get translator => _s;
 
-  Locale get locale => Locale(_appString.languageCode);
+  Locale get locale => Locale(Intl.getCurrentLocale());
 
   getLanguage() => locale.languageCode;
 
-  setLanguage(String language) {
-    _appString.languageCode = language;
-  }
+  setLanguage(Locale locale) => S.load(locale);
 
   @override
   Future<void> close() {

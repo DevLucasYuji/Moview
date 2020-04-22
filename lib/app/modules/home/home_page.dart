@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(bloc.string.title),
+            title: Text(bloc.translator.hello),
           ),
           body: Container(
             color: bloc.color.primary,
@@ -45,13 +45,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onButtonPressed() {
-    if (bloc.getLanguage() == 'pt') {
-      bloc.setLanguage('en');
-    } else {
-      bloc.setLanguage('pt');
-    }
-
-    bloc.appBloc.add(AppLanguageEvent(bloc.locale));
+    var locale = Locale(bloc.getLanguage() == 'pt' ? 'en' : 'pt');
+    bloc.appBloc.add(AppLanguageEvent(locale));
     bloc.appBloc.add(AppColorEvent());
   }
 

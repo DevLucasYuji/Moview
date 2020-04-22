@@ -1,0 +1,24 @@
+{
+  "@@last_modified": "2020-04-21T23:53:21.063336",
+  "title": "Hello world App",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hello": "Hello",
+  "@hello": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "accountNotExist": "Accout not exist",
+  "@accountNotExist": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailInvalid": "Invalid email",
+  "@emailInvalid": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

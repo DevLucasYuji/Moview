@@ -1,0 +1,54 @@
+{
+  "@@locale": "pt",
+  "title": "Olá mundo",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hello": "Olá",
+  "@hello": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "accountNotExist": "Essa conta não existe",
+  "@accountNotExist": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordWrong": "Sua senha está errada",
+  "@passwordWrong": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailWrong": "Seu e-mail está errado",
+  "@emailWrong": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailInvalid": "Preencha com um e-mail inválido",
+  "@emailInvalid": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enter": "Enter",
+  "@enter": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "register": "Registrar-se",
+  "@register": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emptyField": "Este campo não pode estar vazio",
+  "@emptyField": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "Password",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  } 
+}
