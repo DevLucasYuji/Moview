@@ -10,6 +10,8 @@ import 'package:Moview/app/widgets/single_child_scrollview_disallow_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../app_routes.dart';
+
 class LoginPage extends StatefulWidget {
   final String title;
   const LoginPage({Key key, this.title = "Login"}) : super(key: key);
@@ -119,6 +121,11 @@ class _LoginPageState extends State<LoginPage> {
           offset: Offset(0, value),
           child: child,
         );
+      },
+      onEnd: () {
+        if (state is SuccessLoginState) {
+          _showHome(context);
+        }
       },
       curve: Curves.easeInOutBack,
       tween: Tween(
@@ -274,6 +281,10 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void _showHome(context) {
+    Navigator.of(context).pushReplacementNamed(Routes.home);
   }
   // Navigator.pushReplacementNamed(context, Routes.home);
 }
