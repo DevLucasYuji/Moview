@@ -25,9 +25,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailInvalid" : MessageLookupByLibrary.simpleMessage("Preencha com um e-mail inválido"),
     "emailWrong" : MessageLookupByLibrary.simpleMessage("Seu e-mail está errado"),
     "emptyField" : MessageLookupByLibrary.simpleMessage("Este campo não pode estar vazio"),
-    "enter" : MessageLookupByLibrary.simpleMessage("Enter"),
+    "enter" : MessageLookupByLibrary.simpleMessage("Entrar"),
     "hello" : MessageLookupByLibrary.simpleMessage("Olá"),
-    "password" : MessageLookupByLibrary.simpleMessage("Password"),
+    "password" : MessageLookupByLibrary.simpleMessage("Senha"),
     "passwordWrong" : MessageLookupByLibrary.simpleMessage("Sua senha está errada"),
     "register" : MessageLookupByLibrary.simpleMessage("Registrar-se"),
     "title" : MessageLookupByLibrary.simpleMessage("Olá mundo")

@@ -26,10 +26,7 @@ class AppWidget extends StatelessWidget {
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate
               ],
-              supportedLocales: [
-                Locale('en', 'US'),
-                Locale('pt', 'BR'),
-              ],
+              supportedLocales: S.delegate.supportedLocales,
               title: 'Flutter aaa',
               themeMode: ThemeMode.system,
               theme: ThemeData(

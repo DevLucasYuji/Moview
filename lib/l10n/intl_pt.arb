@@ -31,7 +31,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "enter": "Enter",
+  "enter": "Entrar",
   "@enter": {
     "type": "text",
     "placeholders": {}
@@ -46,7 +46,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "password": "Password",
+  "password": "Senha",
   "@password": {
     "type": "text",
     "placeholders": {}

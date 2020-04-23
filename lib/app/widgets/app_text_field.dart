@@ -58,8 +58,8 @@ class AppTextField extends StatelessWidget {
               ? IconButton(
                   icon: FaIcon(
                     obscureText
-                        ? FontAwesomeIcons.eyeSlash
-                        : FontAwesomeIcons.eye,
+                        ? FontAwesomeIcons.eye
+                        : FontAwesomeIcons.eyeSlash,
                     color: Colors.grey[500],
                     size: 20,
                   ),

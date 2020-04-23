@@ -23,9 +23,6 @@ class FirebaseAuthModel {
       case FirebaseError.password:
         message = translator.passwordWrong;
         break;
-      case FirebaseError.notFound:
-        message = translator.accountNotExist;
-        break;
       default:
         message = translator.accountNotExist;
         break;

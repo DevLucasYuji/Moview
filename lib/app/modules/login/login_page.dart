@@ -1,9 +1,8 @@
-import 'package:Moview/app/app_routes.dart';
-import 'package:Moview/app/utils/regex_util.dart';
 import 'package:Moview/app/modules/login/bloc/login_bloc.dart';
 import 'package:Moview/app/modules/login/bloc/login_event.dart';
 import 'package:Moview/app/modules/login/bloc/login_state.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
+import 'package:Moview/app/utils/regex_util.dart';
 import 'package:Moview/app/widgets/app_button.dart';
 import 'package:Moview/app/widgets/app_text_field.dart';
 import 'package:Moview/app/widgets/background_linear.dart';
@@ -57,39 +56,77 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _body() {
-    Future.microtask(() => setState(() => _opacityLogo = 1));
     return SingleChildScrollViewDisallowGlow(
       layoutBuilder: true,
       child: Form(
         key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _logoIcon(),
-                  _animatedOpacity(
-                    padding: const EdgeInsets.only(top: 6.0),
-                    child: _logoName(),
-                  )
-                ],
+        child: BlocBuilder<LoginBloc, LoginState>(
+          bloc: _bloc,
+          builder: (context, state) => Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: _finishAnimation(
+                  state: state,
+                  toUp: true,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _logoIcon(),
+                      _animatedOpacity(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: _logoName(),
+                      )
+                    ],
+                  ),
+                ),
               ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: _animatedOpacity(
-                child: _formLogin(),
-              ),
-            )
-          ],
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: _finishAnimation(
+                  state: state,
+                  child: _animatedOpacity(
+                    child: _formLogin(state),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  TweenAnimationBuilder<double> _finishAnimation({
+    Widget child,
+    LoginState state,
+    bool toUp = false,
+  }) {
+    var end = 0.0;
+
+    if (state is SuccessLoginState) {
+      double halfHeight = MediaQuery.of(context).size.height / 2;
+      end = toUp ? -halfHeight : halfHeight;
+    }
+
+    return TweenAnimationBuilder(
+      builder: (BuildContext context, value, Widget child) {
+        return Transform.translate(
+          offset: Offset(0, value),
+          child: child,
+        );
+      },
+      curve: Curves.easeInOutBack,
+      tween: Tween(
+        begin: 0.0,
+        end: end,
+      ),
+      duration: Duration(milliseconds: 1250),
+      child: child,
     );
   }
 
@@ -134,6 +171,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _animatedOpacity({Widget child, EdgeInsetsGeometry padding}) {
+    Future.microtask(() => setState(() => _opacityLogo = 1));
+
     return AnimatedOpacity(
       opacity: _opacityLogo,
       curve: Curves.easeInOut,
@@ -145,106 +184,96 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _formLogin() {
+  Widget _formLogin(LoginState state) {
+    _isLoading = state is LoadingLoginState;
+
     return Container(
       margin: EdgeInsets.all(20),
       padding: EdgeInsets.all(8),
-      child: BlocBuilder<LoginBloc, LoginState>(
-        bloc: _bloc,
-        builder: (context, state) {
-          _isLoading = state is LoadingLoginState;
-          if (state is SuccessLoginState) _showLoginScreen(context);
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          AppTextField(
+            hintText: "Login",
+            inputType: TextInputType.emailAddress,
+            icon: Icons.account_circle,
+            controller: _emailController,
+            validator: (String email) {
+              if (email.isEmpty) {
+                return _bloc.translator.emptyField;
+              }
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              AppTextField(
-                hintText: "Login",
-                inputType: TextInputType.emailAddress,
-                icon: Icons.account_circle,
-                controller: _emailController,
-                validator: (String email) {
-                  if (email.isEmpty) {
-                    return _bloc.translator.emptyField;
-                  }
+              if (!RegexUtils.validEmail(email)) {
+                return _bloc.translator.emailInvalid;
+              }
 
-                  if (!RegexUtils.validEmail(email)) {
-                    return _bloc.translator.emailInvalid;
-                  }
-
-                  return null;
-                },
-              ),
-              AppTextField(
-                hintText: _bloc.translator.password,
-                inputType: TextInputType.visiblePassword,
-                obscureText: _obscureText,
-                padding: EdgeInsets.only(top: 24),
-                icon: Icons.lock,
-                controller: _passwordController,
-                onSuffixPressed: () =>
-                    setState(() => _obscureText = !_obscureText),
-              ),
-              (state is ErrorLoginState)
-                  ? Container(
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(top: 8, left: 8),
-                      child: Text(
-                        state.message,
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 16,
-                        ),
-                      ),
-                    )
-                  : Container(),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlineButton(
-                      onPressed: () {},
-                      child: Text(
-                        _bloc.translator.register,
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      borderSide: BorderSide(
-                        width: 0,
-                        color: Colors.transparent,
-                      ),
-                      highlightedBorderColor: Colors.transparent,
+              return null;
+            },
+          ),
+          AppTextField(
+            hintText: _bloc.translator.password,
+            inputType: TextInputType.visiblePassword,
+            obscureText: _obscureText,
+            padding: EdgeInsets.only(top: 24),
+            icon: Icons.lock,
+            controller: _passwordController,
+            onSuffixPressed: () => setState(() => _obscureText = !_obscureText),
+          ),
+          (state is ErrorLoginState)
+              ? Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(top: 8, left: 8),
+                  child: Text(
+                    state.message,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
                     ),
-                    AppButton(
-                      text: _bloc.translator.enter,
-                      isLoading: _isLoading,
-                      onPressed: () {
-                        final FormState form = _formKey.currentState;
-                        if (form.validate()) {
-                          _bloc.add(
-                            FetchLoginEvent(
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  ],
+                  ),
+                )
+              : Container(),
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                OutlineButton(
+                  onPressed: () {},
+                  child: Text(
+                    _bloc.translator.register,
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.transparent,
+                  ),
+                  highlightedBorderColor: Colors.transparent,
                 ),
-              )
-            ],
-          );
-        },
+                AppButton(
+                  text: _bloc.translator.enter,
+                  isLoading: _isLoading,
+                  onPressed: () {
+                    final FormState form = _formKey.currentState;
+                    if (form.validate()) {
+                      _bloc.add(
+                        FetchLoginEvent(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        ),
+                      );
+                    }
+                  },
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
-
-  _showLoginScreen(context) {
-    Navigator.pushReplacementNamed(context, Routes.home);
-  }
+  // Navigator.pushReplacementNamed(context, Routes.home);
 }
