@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeBloc bloc = HomeModule.to.bloc();
+  HomeBloc _bloc = HomeModule.to.bloc();
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +23,16 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         BackgroundLinear(),
         BlocBuilder<HomeBloc, HomeState>(
-          bloc: bloc,
+          bloc: _bloc,
           builder: (context, state) {
             return Container(
               child: Center(
                 child: FlatButton(
                   child: Text(
-                    "Trocar",
-                    style: TextStyle(color: bloc.color.secondary),
+                    _bloc.translator.enter,
+                    style: TextStyle(color: _bloc.color.secondary),
                   ),
-                  onPressed: () {
-                    _onButtonPressed();
-                  },
+                  onPressed: _onButtonPressed,
                 ),
               ),
             );
@@ -45,14 +43,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onButtonPressed() {
-    var locale = Locale(bloc.getLanguage() == 'pt' ? 'en' : 'pt');
-    bloc.appBloc.add(AppLanguageEvent(locale));
-    bloc.appBloc.add(AppColorEvent());
+    var locale = Locale(_bloc.getLanguage() == 'pt' ? 'en' : 'pt');
+    _bloc.appBloc.add(AppLanguageEvent(locale));
+    _bloc.appBloc.add(AppColorEvent());
   }
 
   @override
   void dispose() {
-    bloc.close();
+    _bloc.close();
     super.dispose();
   }
 }

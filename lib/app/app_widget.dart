@@ -55,7 +55,8 @@ class AppWidget extends StatelessWidget {
               },
               routes: {
                 Routes.splash: (context) => SplashModule(),
-                Routes.login: (context) => LoginModule()
+                Routes.login: (context) => LoginModule(),
+                Routes.home: (context) => HomeModule()
               });
         },
       ),

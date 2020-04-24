@@ -11,7 +11,7 @@ abstract class BlocBase<Event, State> extends Bloc<Event, State> {
 
   static AppColor _appColor = AppModule.to.getDependency();
 
-  AppBloc appBloc = AppModule.to.getBloc();
+  AppBloc get appBloc => AppModule.to.getBloc();
 
   AppColor get color => _appColor;
 
@@ -22,10 +22,4 @@ abstract class BlocBase<Event, State> extends Bloc<Event, State> {
   getLanguage() => locale.languageCode;
 
   setLanguage(Locale locale) => S.load(locale);
-
-  @override
-  Future<void> close() {
-    appBloc.close();
-    return super.close();
-  }
 }
