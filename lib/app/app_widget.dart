@@ -34,9 +34,27 @@ class AppWidget extends StatelessWidget {
                 secondaryHeaderColor: color.secondary,
               ),
               initialRoute: Routes.splash,
+              onGenerateRoute: (settings) {
+                var module;
+                switch (settings.name) {
+                  case Routes.home:
+                    module = HomeModule();
+                    break;
+                }
+
+                if (module != null) {
+                  return PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => module,
+                    transitionsBuilder: (_, anim, __, child) {
+                      return FadeTransition(opacity: anim, child: child);
+                    },
+                  );
+                }
+
+                return null;
+              },
               routes: {
                 Routes.splash: (context) => SplashModule(),
-                Routes.home: (context) => HomeModule(),
                 Routes.login: (context) => LoginModule()
               });
         },

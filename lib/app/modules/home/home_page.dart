@@ -2,6 +2,7 @@ import 'package:Moview/app/bloc/app_event.dart';
 import 'package:Moview/app/modules/home/bloc/home_bloc.dart';
 import 'package:Moview/app/modules/home/bloc/home_state.dart';
 import 'package:Moview/app/modules/home/home_module.dart';
+import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,29 +19,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      bloc: bloc,
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(bloc.translator.hello),
-          ),
-          body: Container(
-            color: bloc.color.primary,
-            child: Center(
-              child: FlatButton(
-                child: Text(
-                  "Trocar",
-                  style: TextStyle(color: bloc.color.secondary),
+    return Stack(
+      children: <Widget>[
+        BackgroundLinear(),
+        BlocBuilder<HomeBloc, HomeState>(
+          bloc: bloc,
+          builder: (context, state) {
+            return Container(
+              child: Center(
+                child: FlatButton(
+                  child: Text(
+                    "Trocar",
+                    style: TextStyle(color: bloc.color.secondary),
+                  ),
+                  onPressed: () {
+                    _onButtonPressed();
+                  },
                 ),
-                onPressed: () {
-                  _onButtonPressed();
-                },
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 

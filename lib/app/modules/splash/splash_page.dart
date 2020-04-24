@@ -50,8 +50,7 @@ class _SplashPageState extends State<SplashPage> {
                           );
                         });
                       } else {
-                        final route =
-                            state.isAuth ? Routes.login : Routes.login;
+                        final route = state.isAuth ? Routes.home : Routes.login;
                         Navigator.pushReplacementNamed(context, route);
                       }
                     }),

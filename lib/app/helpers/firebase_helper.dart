@@ -39,6 +39,10 @@ class FirebaseHelper {
     }
   }
 
+  Future<FirebaseUser> get getCurrentUser async {
+    return await _auth.currentUser();
+  }
+
   Future<FirebaseUser> handleSignUp(email, password) async {
     AuthResult result = await _auth.createUserWithEmailAndPassword(
       email: email,
