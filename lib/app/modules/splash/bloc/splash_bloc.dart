@@ -1,4 +1,6 @@
+import 'package:Moview/app/app_module.dart';
 import 'package:Moview/app/bloc/bloc_base.dart';
+import 'package:Moview/app/helpers/firebase_helper.dart';
 import 'package:Moview/app/modules/splash/bloc/splash_event.dart';
 import 'package:Moview/app/modules/splash/bloc/splash_state.dart';
 
@@ -15,12 +17,10 @@ class SplashBloc extends BlocBase<SplashEvent, SplashState> {
       yield SplashAnimationState();
     }
 
-    if (event is FinishAnimationEvent) {
-      yield SplashFinishState();
-    }
-
-    if (event is FinishEvent) {
-      yield FinishSplashState(isAuth: false);
+    if (event is FinishSplashEvent) {
+      var user =
+          await AppModule.to.getDependency<FirebaseHelper>().getCurrentUser;
+      yield FinishSplashState(isAuth: user != null, isReverse: event.isReverse);
     }
   }
 }

@@ -1,11 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern_test.dart';
 
-import 'package:Moview/app/bloc/app_bloc.dart';
 import 'package:Moview/app/app_module.dart';
 
 void main() {
   initModule(AppModule());
-  AppBloc bloc;
+  // AppBloc bloc;
 
   // setUp(() {
   //     bloc = AppModule.to.bloc<AppBloc>();

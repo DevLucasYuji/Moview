@@ -1,5 +1,5 @@
 class Routes {
-  static String splash = '/';
-  static String home = '/home';
-  static String login = '/login';
+  static const String splash = '/';
+  static const String home = '/home';
+  static const String login = '/login';
 }

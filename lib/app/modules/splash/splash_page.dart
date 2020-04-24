@@ -3,6 +3,7 @@ import 'package:Moview/app/modules/splash/bloc/splash_bloc.dart';
 import 'package:Moview/app/modules/splash/bloc/splash_event.dart';
 import 'package:Moview/app/modules/splash/bloc/splash_state.dart';
 import 'package:Moview/app/modules/splash/splash_module.dart';
+import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,58 +21,57 @@ class _SplashPageState extends State<SplashPage> {
     _bloc.add(InitialEvent());
   }
 
-  double _scaleValue;
-  double begin;
-  double end;
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: _bloc.color.secondary,
-      child: Center(
-        child: BlocBuilder<SplashBloc, SplashState>(
-          bloc: _bloc,
-          builder: (BuildContext context, state) {
-            if (state is SplashAnimationState) {
-              return _animationScale(context);
-            }
-
-            if (state is SplashFinishState) {
-              return _animationTransform(
-                context,
-                () => _bloc.add(FinishEvent()),
-              );
-            }
-
-            if (state is FinishSplashState) {
-              Future.delayed(Duration(seconds: 3)).then((_) {
-                final route = state.isAuth ? Routes.login : Routes.login;
-                Navigator.pushNamed(context, route);
-              });
-
-              return Hero(
-                tag: 'hero',
-                child: Transform.scale(
-                  scale: 0.85,
-                  child: Image.asset('assets/images/logo.png'),
-                ),
-              );
-            }
-            return _logoWidget(context);
-          },
+    return Stack(
+      children: <Widget>[
+        BackgroundLinear(
+          beginColor: _bloc.color.secondaryVariant,
+          endColor: _bloc.color.secondary,
+          begin: Alignment.centerLeft,
         ),
-      ),
+        Container(
+          child: Center(
+            child: BlocBuilder<SplashBloc, SplashState>(
+              bloc: _bloc,
+              builder: (BuildContext context, state) {
+                if (state is SplashAnimationState) {
+                  return _animationScale(context);
+                }
+
+                if (state is FinishSplashState) {
+                  return Hero(
+                    tag: "logoIcon",
+                    child: _animationTransform(context, state.isReverse, () {
+                      if (!state.isReverse) {
+                        Future.delayed(Duration(milliseconds: 250)).then((_) {
+                          _bloc.add(
+                            FinishSplashEvent(isReverse: !state.isReverse),
+                          );
+                        });
+                      } else {
+                        final route = state.isAuth ? Routes.home : Routes.login;
+                        Navigator.pushReplacementNamed(context, route);
+                      }
+                    }),
+                  );
+                }
+                return _logoWidget(context);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   TweenAnimationBuilder<double> _animationScale(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 1, end: 0.4),
+      tween: Tween(begin: 1, end: 0.5),
       curve: Curves.easeInBack,
       duration: Duration(seconds: 1),
-      onEnd: () => _bloc.add(FinishAnimationEvent()),
+      onEnd: () => _bloc.add(FinishSplashEvent(isReverse: false)),
       builder: (_, value, child) {
-        _scaleValue = value;
         return _transformScale(value, child);
       },
       child: _logoWidget(context),
@@ -85,7 +85,7 @@ class _SplashPageState extends State<SplashPage> {
     return Image.asset(
       'assets/images/logo_icon.png',
       fit: BoxFit.fitWidth,
-      width: 225,
+      width: 175,
     );
   }
 
@@ -96,13 +96,19 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  Widget _animationTransform(BuildContext context, Function onEnd) {
+  Widget _animationTransform(context, bool isReverse, Function onEnd) {
+    double beginName = -375;
+    double endName = 55;
+    double beginLogo = 0;
+    double endLogo = -125;
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         _animationTranslate(
-          begin: -375,
-          end: 55,
+          isReverse: isReverse,
+          begin: beginName,
+          end: endName,
           child: _logoNameWidget(),
           onEnd: onEnd,
         ),
@@ -111,16 +117,16 @@ class _SplashPageState extends State<SplashPage> {
           child: ClipPath(
             clipper: TriangleClipper(),
             child: Container(
-              height: 225,
-              color: _bloc.color.secondary,
-              width: 115,
+              color: _bloc.color.secondaryVariant,
+              width: (MediaQuery.of(context).size.width / 2) - endName - 25,
             ),
           ),
         ),
         _animationTranslate(
-          begin: 0,
-          end: -125,
-          child: _transformScale(_scaleValue, _logoWidget(context)),
+          isReverse: isReverse,
+          begin: beginLogo,
+          end: endLogo,
+          child: _transformScale(0.5, _logoWidget(context)),
         )
       ],
     );
@@ -131,10 +137,14 @@ class _SplashPageState extends State<SplashPage> {
     double begin,
     double end,
     Function onEnd,
+    bool isReverse,
   }) {
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: begin, end: end),
-      duration: Duration(seconds: 2),
+      tween: Tween(
+        begin: isReverse ? end : begin,
+        end: isReverse ? begin : end,
+      ),
+      duration: Duration(milliseconds: isReverse ? 1250 : 2000),
       curve: Curves.easeInOutQuint,
       onEnd: onEnd,
       builder: (_, value, child) => Transform.translate(
@@ -159,7 +169,11 @@ class TriangleClipper extends CustomClipper<Path> {
     path.lineTo(0.0, size.height);
     path.lineTo(
       size.width,
-      size.height / 2,
+      size.height / 1.95,
+    );
+    path.lineTo(
+      size.width,
+      size.height / 2.05,
     );
     path.close();
     return path;

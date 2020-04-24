@@ -2,6 +2,7 @@ import 'package:Moview/app/bloc/app_event.dart';
 import 'package:Moview/app/modules/home/bloc/home_bloc.dart';
 import 'package:Moview/app/modules/home/bloc/home_state.dart';
 import 'package:Moview/app/modules/home/home_module.dart';
+import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,50 +15,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeBloc bloc = HomeModule.to.bloc();
+  HomeBloc _bloc = HomeModule.to.bloc();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      bloc: bloc,
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(bloc.string.title),
-          ),
-          body: Container(
-            color: bloc.color.primary,
-            child: Center(
-              child: FlatButton(
-                child: Text(
-                  "Trocar",
-                  style: TextStyle(color: bloc.color.secondary),
+    return Stack(
+      children: <Widget>[
+        BackgroundLinear(),
+        BlocBuilder<HomeBloc, HomeState>(
+          bloc: _bloc,
+          builder: (context, state) {
+            return Container(
+              child: Center(
+                child: FlatButton(
+                  child: Text(
+                    _bloc.translator.enter,
+                    style: TextStyle(color: _bloc.color.secondary),
+                  ),
+                  onPressed: _onButtonPressed,
                 ),
-                onPressed: () {
-                  _onButtonPressed();
-                },
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 
   void _onButtonPressed() {
-    if (bloc.getLanguage() == 'pt') {
-      bloc.setLanguage('en');
-    } else {
-      bloc.setLanguage('pt');
-    }
-
-    bloc.appBloc.add(AppLanguageEvent(bloc.locale));
-    bloc.appBloc.add(AppColorEvent());
+    var locale = Locale(_bloc.getLanguage() == 'pt' ? 'en' : 'pt');
+    _bloc.appBloc.add(AppLanguageEvent(locale));
+    _bloc.appBloc.add(AppColorEvent());
   }
 
   @override
   void dispose() {
-    bloc.close();
+    _bloc.close();
     super.dispose();
   }
 }

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-05T20:43:47.811958",
+  "@@locale": "en",
   "title": "Hello world App",
   "@title": {
     "description": "The application title",
@@ -10,5 +10,45 @@
   "@hello": {
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "accountNotExist": "This account not exist",
+  "@accountNotExist": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordWrong": "Your password is wrong",
+  "@passwordWrong": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailWrong": "Your email is wrong",
+  "@emailWrong": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailInvalid": "This field need to be an email",
+  "@emailInvalid": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enter": "Enter",
+  "@enter": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "register": "Register",
+  "@register": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emptyField": "This field must not be empty",
+  "@emptyField": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "Password",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  } 
 }

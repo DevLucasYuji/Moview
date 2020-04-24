@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:Moview/app/app_color.dart';
-import 'package:Moview/app_string.dart';
+import 'package:Moview/generated/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app_event.dart';
@@ -18,7 +18,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
 
     if (event is AppLanguageEvent) {
-      AppString.load(event.locale);
+      S.load(event.locale);
       yield AppLanguageState();
     }
   }
