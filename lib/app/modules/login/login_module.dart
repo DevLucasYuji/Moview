@@ -7,7 +7,7 @@ import 'package:Moview/app/modules/login/login_page.dart';
 class LoginModule extends ModuleWidget {
   @override
   List<Bloc> get blocs => [
-        Bloc((i) => LoginBloc()),
+        Bloc((i) => LoginBloc(i.getDependency<LoginRepository>())),
       ];
 
   @override
