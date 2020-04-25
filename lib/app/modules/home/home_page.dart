@@ -2,9 +2,12 @@ import 'package:Moview/app/bloc/app_event.dart';
 import 'package:Moview/app/modules/home/bloc/home_bloc.dart';
 import 'package:Moview/app/modules/home/bloc/home_state.dart';
 import 'package:Moview/app/modules/home/home_module.dart';
+import 'package:Moview/app/widgets/animatedBottomNavigationBar/animated_bottom_navigation_bar.dart';
+import 'package:Moview/app/widgets/animatedBottomNavigationBar/animated_navigation_item.dart';
 import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -19,26 +22,40 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        BackgroundLinear(),
-        BlocBuilder<HomeBloc, HomeState>(
-          bloc: _bloc,
-          builder: (context, state) {
-            return Container(
-              child: Center(
-                child: FlatButton(
-                  child: Text(
-                    _bloc.translator.enter,
-                    style: TextStyle(color: _bloc.color.secondary),
-                  ),
-                  onPressed: _onButtonPressed,
-                ),
-              ),
-            );
-          },
+    return Scaffold(
+      bottomNavigationBar: AnimBottomNavigationBar(items: [
+        AnimatedNavigationItem(
+          color: Colors.grey,
+          icon: FontAwesomeIcons.home,
+          text: Text("Home"),
         ),
-      ],
+        AnimatedNavigationItem(
+          color: Colors.blueAccent,
+          icon: FontAwesomeIcons.search,
+          text: Text("Search"),
+        ),
+        AnimatedNavigationItem(
+          color: Colors.red,
+          icon: FontAwesomeIcons.heart,
+          text: Text("Favorite"),
+        ),
+        AnimatedNavigationItem(
+          color: Colors.greenAccent,
+          icon: FontAwesomeIcons.user,
+          text: Text("Search"),
+        ),
+      ]),
+      body: Stack(
+        children: <Widget>[
+          BackgroundLinear(),
+          BlocBuilder<HomeBloc, HomeState>(
+            bloc: _bloc,
+            builder: (context, state) {
+              return Container();
+            },
+          ),
+        ],
+      ),
     );
   }
 

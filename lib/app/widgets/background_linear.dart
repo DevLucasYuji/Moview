@@ -31,6 +31,7 @@ class BackgroundLinear extends StatelessWidget {
           begin: begin,
           end: end,
           stops: [0.35, 1],
+          tileMode: TileMode.mirror,
         ),
       ),
       child: child ?? Container(),
