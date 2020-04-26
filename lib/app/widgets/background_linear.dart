@@ -25,8 +25,8 @@ class BackgroundLinear extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: <Color>[
-            beginColor ?? _appColor.secondaryVariant,
-            endColor ?? _appColor.secondary,
+            beginColor ?? _appColor.background,
+            endColor ?? _appColor.backgroundVariant,
           ],
           begin: begin,
           end: end,

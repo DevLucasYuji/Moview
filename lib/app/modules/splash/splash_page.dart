@@ -25,11 +25,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        BackgroundLinear(
-          beginColor: _bloc.color.secondaryVariant,
-          endColor: _bloc.color.secondary,
-          begin: Alignment.centerLeft,
-        ),
+        BackgroundLinear(),
         Container(
           child: Center(
             child: BlocBuilder<SplashBloc, SplashState>(
@@ -117,7 +113,7 @@ class _SplashPageState extends State<SplashPage> {
           child: ClipPath(
             clipper: TriangleClipper(),
             child: Container(
-              color: _bloc.color.secondaryVariant,
+              color: _bloc.color.background,
               width: (MediaQuery.of(context).size.width / 2) - endName - 25,
             ),
           ),
