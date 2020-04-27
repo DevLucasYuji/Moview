@@ -33,6 +33,6 @@ Meu objetivo profissional é melhorar minhas habilidades desenvolvendo animaçõ
 - [:x:] Tela de Assistidos/Não assistidos
 - [:x:] Tela de Esqueci password
 
-# Comentários / Opiniões
+# Meus Comentários / Opiniões
 
 O controle Flutter_bloc é bastante organizado e robusto se é usado da maneira correta, porém dependendo do quanto você quer gerenciar o estado da sua tela acaba dificultando e ficando muito extenso a parte do codigo.

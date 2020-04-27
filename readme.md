@@ -35,6 +35,6 @@ My professional objective is improve my skills developing fluid animations, more
 - [:x:] Forgot password screen
 
 
-# My Comments / Opnion
+# My Comments / Opnions
 
 The Flutter_bloc control is quite and robust if used in the right way, however depending how much you want to state management your screen it ends up making the part of the code difficult and very extensive.
