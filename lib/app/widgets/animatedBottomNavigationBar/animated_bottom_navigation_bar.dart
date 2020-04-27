@@ -10,6 +10,7 @@ class AnimBottomNavigationBar extends StatefulWidget {
   final Color backgroundColor;
   final int initialIndex;
   final Color disabledColor;
+  final Function(int) onItemPressed;
 
   const AnimBottomNavigationBar({
     Key key,
@@ -17,6 +18,7 @@ class AnimBottomNavigationBar extends StatefulWidget {
     this.initialIndex = 0,
     this.backgroundColor,
     this.disabledColor,
+    this.onItemPressed,
   })  : assert(items != null),
         assert(initialIndex != null && initialIndex < items.length),
         super(key: key);
@@ -84,6 +86,7 @@ class _AnimBottomNavigationBarState extends State<AnimBottomNavigationBar> {
                     setState(() {
                       _index = itemIndex;
                     });
+                    widget.onItemPressed(itemIndex);
                   });
             }).toList(),
           ),

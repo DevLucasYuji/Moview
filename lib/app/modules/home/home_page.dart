@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   HomeBloc _bloc = HomeModule.to.bloc();
-
+  PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,22 +27,37 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: _bloc.color.background,
         disabledColor: _bloc.color.primaryVariant,
         items: _navItems,
+        onItemPressed: (index) => _pageController.animateToPage(
+          index,
+          duration: Duration(milliseconds: 1250),
+          curve: Curves.fastOutSlowIn,
+        ),
       ),
       body: Stack(
         children: <Widget>[
           BackgroundLinear(),
-          NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (scroll) {
-              scroll.disallowGlow();
-              return true;
-            },
-            child: CustomScrollView(
-              slivers: [
-                _sliverAppBar(),
-                _body(context),
-              ],
-            ),
-          ),
+          PageView(
+            controller: _pageController,
+            physics: NeverScrollableScrollPhysics(),
+            allowImplicitScrolling: true,
+            children: [
+              NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (scroll) {
+                  scroll.disallowGlow();
+                  return true;
+                },
+                child: CustomScrollView(
+                  slivers: [
+                    _sliverAppBar(),
+                    _body(context),
+                  ],
+                ),
+              ),
+              Container(color: Colors.white),
+              Container(color: Colors.orange),
+              Container(color: Colors.blue)
+            ],
+          )
         ],
       ),
     );
@@ -237,6 +252,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _bloc.close();
+    _pageController.dispose();
     super.dispose();
   }
 
