@@ -18,7 +18,7 @@ Meu objetivo profissional é melhorar minhas habilidades desenvolvendo animaçõ
 - Bloc pattern
 - Dio
 
-# Conquista
+# Conquistas
 
 - [:heavy_check_mark:] Tela de Splash
 - [:heavy_check_mark:] Tela de Login
