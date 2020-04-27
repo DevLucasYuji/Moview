@@ -1,63 +1,36 @@
 import 'package:Moview/app/models/movie_model.dart';
 import 'package:Moview/app/modules/home/bloc/home_bloc.dart';
 import 'package:Moview/app/modules/home/home_module.dart';
-import 'package:Moview/app/widgets/animatedBottomNavigationBar/animated_bottom_navigation_bar.dart';
-import 'package:Moview/app/widgets/animatedBottomNavigationBar/animated_navigation_item.dart';
 import 'package:Moview/app/widgets/app_icon_button.dart';
-import 'package:Moview/app/widgets/background_linear.dart';
 import 'package:Moview/app/widgets/movie_list.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomePage extends StatefulWidget {
-  final String title;
-  const HomePage({Key key, this.title = "Home"}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeBloc _bloc = HomeModule.to.bloc();
-  PageController _pageController = PageController();
+  HomeBloc _bloc = HomeModule.to.getBloc();
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: AnimBottomNavigationBar(
-        backgroundColor: _bloc.color.background,
-        disabledColor: _bloc.color.primaryVariant,
-        items: _navItems,
-        onItemPressed: (index) => _pageController.animateToPage(
-          index,
-          duration: Duration(milliseconds: 1250),
-          curve: Curves.fastOutSlowIn,
-        ),
-      ),
-      body: Stack(
-        children: <Widget>[
-          BackgroundLinear(),
-          PageView(
-            controller: _pageController,
-            physics: NeverScrollableScrollPhysics(),
-            allowImplicitScrolling: true,
-            children: [
-              NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (scroll) {
-                  scroll.disallowGlow();
-                  return true;
-                },
-                child: CustomScrollView(
-                  slivers: [
-                    _sliverAppBar(),
-                    _body(context),
-                  ],
-                ),
-              ),
-              Container(color: Colors.white),
-              Container(color: Colors.orange),
-              Container(color: Colors.blue)
-            ],
-          )
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (scroll) {
+        scroll.disallowGlow();
+        return true;
+      },
+      child: CustomScrollView(
+        slivers: [
+          _sliverAppBar(),
+          _body(context),
         ],
       ),
     );
@@ -248,51 +221,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _bloc.close();
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  List<AnimatedNavigationItem> get _navItems {
-    return [
-      AnimatedNavigationItem(
-        color: Colors.grey,
-        icon: FontAwesomeIcons.home,
-        text: Text(
-          "Home",
-          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-        ),
-      ),
-      AnimatedNavigationItem(
-        color: Colors.blueAccent,
-        icon: FontAwesomeIcons.search,
-        text: Text(
-          "Search",
-          style:
-              TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold),
-        ),
-      ),
-      AnimatedNavigationItem(
-        color: Colors.red,
-        icon: FontAwesomeIcons.heart,
-        text: Text(
-          "Favorite",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-        ),
-      ),
-      AnimatedNavigationItem(
-        color: Colors.green,
-        icon: FontAwesomeIcons.user,
-        text: Text(
-          "Profile",
-          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ];
-  }
-
-  List _recommendation() => [];
 }

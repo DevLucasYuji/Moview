@@ -3,7 +3,7 @@ import 'package:Moview/app/app_module.dart';
 import 'package:Moview/app/app_routes.dart';
 import 'package:Moview/app/bloc/app_bloc.dart';
 import 'package:Moview/app/bloc/app_state.dart';
-import 'package:Moview/app/modules/home/home_module.dart';
+import 'package:Moview/app/modules/home_control/home_control_module.dart';
 import 'package:Moview/app/modules/login/login_module.dart';
 import 'package:Moview/app/modules/splash/splash_module.dart';
 import 'package:Moview/generated/l10n.dart';
@@ -37,8 +37,8 @@ class AppWidget extends StatelessWidget {
               onGenerateRoute: (settings) {
                 var module;
                 switch (settings.name) {
-                  case Routes.home:
-                    module = HomeModule();
+                  case Routes.homeControl:
+                    module = HomeControlModule();
                     break;
                 }
 
@@ -56,7 +56,7 @@ class AppWidget extends StatelessWidget {
               routes: {
                 Routes.splash: (context) => SplashModule(),
                 Routes.login: (context) => LoginModule(),
-                Routes.home: (context) => HomeModule()
+                Routes.homeControl: (context) => HomeControlModule()
               });
         },
       ),

@@ -44,6 +44,10 @@ class _AnimBottomNavigationBarState extends State<AnimBottomNavigationBar> {
     var margin = widthItem / 6;
     double posX = widthItem * _index;
 
+    return _body(posX, margin, widthItem);
+  }
+
+  Stack _body(double posX, double margin, double widthItem) {
     return Stack(
       children: <Widget>[
         TweenAnimationBuilder(

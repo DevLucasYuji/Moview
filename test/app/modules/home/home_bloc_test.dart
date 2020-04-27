@@ -1,9 +1,8 @@
+import 'package:Moview/app/modules/home_control/home_control_module.dart';
 import 'package:bloc_pattern/bloc_pattern_test.dart';
 
-import 'package:Moview/app/modules/home/home_module.dart';
-
 void main() {
-  initModule(HomeModule());
+  initModule(HomeControlModule());
   // HomeBloc bloc;
 
   // setUp(() {

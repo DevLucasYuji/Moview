@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showHome(context) {
-    Navigator.of(context).pushReplacementNamed(Routes.home);
+    Navigator.of(context).pushReplacementNamed(Routes.homeControl);
   }
   // Navigator.pushReplacementNamed(context, Routes.home);
 }
