@@ -10,7 +10,7 @@ My professional objective is improve my skills developing fluid animations, more
 
 # Application Flow
 
-![alt_text](https://i.imgur.com/cXiiYRF.png)
+![alt_text](https://i.imgur.com/pv8PoR2.png)
 
 # Most libraries used
 
